@@ -1,0 +1,94 @@
+<script>
+    const ultBolli = document.getElementById('ultimaBolilla')
+
+    function numeroRandom() {
+      let resultado = Math.floor(Math.random() * 100)
+      ultBolli.innerHTML = resultado < 10 ? '0' + resultado : resultado // me rompe el toc que aparezcan sin el 0
+      jugar(resultado)
+      return resultado
+    }
+
+    const numLaura = document.querySelectorAll('#tira-laura .cuadrado')
+    const numJorgelina = document.querySelectorAll('#tira-jorgelina .cuadrado')
+    const numAle = document.querySelectorAll('#tira-alejandra .cuadrado')
+    const ganadora = document.getElementById('vaGanando')
+    // const boton = document.getElementById('jugarbtn').disa
+
+    let contadorLaura = 0
+    let contadorJorgelina = 0
+    let contadoraAle = 0
+    let hayGanadora = false
+
+    // para cambiar color cuando coincidan
+    function jugar(num) {
+      const display = document.createElement('div')
+      let msj = ''
+      let numeroCarton = false // bandera para ver si esta
+
+      numLaura.forEach(numeroL => {
+        if (parseInt(numeroL.textContent) === num && numeroL.style.backgroundColor !== 'red') {
+          numeroL.style.backgroundColor = 'red'
+          contadorLaura++
+          numeroCarton = true
+        }
+      })
+
+      numJorgelina.forEach(numeroJ => {
+        if (parseInt(numeroJ.textContent) === num && numeroJ.style.backgroundColor !== 'red') {
+          numeroJ.style.backgroundColor = 'red'
+          contadorJorgelina++
+          numeroCarton = true
+        }
+      })
+
+      numAle.forEach(numeroA => {
+        if (parseInt(numeroA.textContent) === num && numeroA.style.backgroundColor !== 'red') {
+          numeroA.style.backgroundColor = 'red'
+          contadoraAle++
+          numeroCarton = true
+        }
+      })
+
+      if (contadorLaura > contadorJorgelina && contadorLaura > contadoraAle) {
+        msj = 'Laura va ganando'
+      } else if (contadorJorgelina > contadorLaura && contadorJorgelina > contadoraAle) {
+        msj = 'Jorgelina va ganando'
+      } else if (contadoraAle > contadorLaura && contadoraAle > contadorJorgelina) {
+        msj = 'Alejandra va ganando'
+      } else if (contadorLaura === contadorJorgelina && contadorLaura === contadoraAle || contadorJorgelina === contadorLaura && contadorJorgelina === contadoraAle || contadoraAle === contadorLaura && contadoraAle === contadorJorgelina) {
+        msj = 'Empate'
+      } else if (!numeroCarton) {
+        // no hace nada
+        return
+      } else {
+        msj = 'Empate'
+      }
+      ganadora.innerHTML = msj
+
+      let msjGanadora
+      if (contadorLaura === numLaura.length) {
+        msjGanadora = 'Ganó Laura!!'
+        hayGanadora = true
+      }
+      if (contadorJorgelina === numJorgelina.length) {
+        msjGanadora = 'Ganó Jorgelina!!'
+        hayGanadora = true
+      }
+      if (contadoraAle === numAle.length) {
+        msjGanadora = 'Ganó Alejandra!!'
+        hayGanadora = true
+      }
+
+      if (hayGanadora) {
+        const felicidades = document.createTextNode(msjGanadora)
+        display.appendChild(felicidades)
+        ganadora.innerHTML = ''
+        ganadora.appendChild(display)
+        document.getElementById('jugarbtn').disabled = true
+        document.getElementById('jugarbtn').style.backgroundColor = 'gray'
+      }
+
+    }
+
+    ultBolli.addEventListener('click', jugar)
+  </script>
